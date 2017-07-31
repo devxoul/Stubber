@@ -55,26 +55,20 @@ public extension Stub {
 
   // MARK: Stubbed
 
-  public func stubbed<R>(_ f: (() -> R), file: StaticString = #file, line: UInt = #line) -> R {
-    guard let result = self._stubbed(f, args: (), file: file, line: line) else {
-      preconditionFailure("⚠️ Method not stubbed. Check the last call stack.", file: file, line: line)
-    }
-    return result
+  public func stubbed<R>(_ f: (() -> R), default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
+    return self._stubbed(f, args: (), default: `default`, file: file, line: line, function: function)
   }
 
-  public func stubbed<A, R>(_ f: (A) -> R, args: A, file: StaticString = #file, line: UInt = #line) -> R {
-    guard let result = self._stubbed(f, args: args, file: file, line: line) else {
-      preconditionFailure("⚠️ Method not stubbed. Check the last call stack.", file: file, line: line)
-    }
-    return result
+  public func stubbed<A, R>(_ f: (A) -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
+    return self._stubbed(f, args: args, default: `default`, file: file, line: line, function: function)
   }
 
-  private func _stubbed<A, R>(_ f: (A) -> R, args: A, file: StaticString = #file, line: UInt = #line) -> R? {
+  private func _stubbed<A, R>(_ f: (A) -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
     let address = self.address(of: f)
-    guard let closure = self.stubs[self.typeName]?[address] as? (A) -> R else {
-      return nil
+    let closure = self.stubs[self.typeName]?[address] as? (A) -> R
+    guard let result = closure?(args) ?? `default`() else {
+      preconditionFailure("⚠️ '\(function)' is not stubbed.", file: file, line: line)
     }
-    let result = closure(args)
     var executions = self.executions[self.typeName] ?? [:]
     executions[address] = (executions[address] ?? []) + [Execution<A, R>(arguments: args, result: result)]
     self.executions[self.typeName] = executions
