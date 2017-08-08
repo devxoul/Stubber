@@ -12,23 +12,23 @@ A minimal method stub for Swift.
 ```swift
 import Stubber
 
-final class StubUserService: UserServiceProtocol, Stub {
+final class StubUserService: UserServiceProtocol {
   func follow(userID: Int) -> String {
-    return stubbed(follow, args: userID)
+    return Stubber.stubbed(follow, args: userID)
   }
 
   func edit(userID: Int, name: String) -> Bool {
-    return stubbed(edit, args: (userID, name))
+    return Stubber.stubbed(edit, args: (userID, name))
   }
 }
 
 func testMethodCall() {
   let userService = StubUserService()
-  userService.stub(userService.follow) { userID in "stub-\(userID)" } // stub
-  userService.follow(userID: 123) // call
-  XCTAssertEqual(userService.executions(userService.follow).count, 1)
-  XCTAssertEqual(userService.executions(userService.follow)[0].arguments, 123)
-  XCTAssertEqual(userService.executions(userService.follow)[0].result, "stub-123")
+  Stubber.stub(userService.follow) { userID in "stub-\(userID)" } // stub
+  Stubber.follow(userID: 123) // call
+  XCTAssertEqual(Stubber.executions(userService.follow).count, 1)
+  XCTAssertEqual(Stubber.executions(userService.follow)[0].arguments, 123)
+  XCTAssertEqual(Stubber.executions(userService.follow)[0].result, "stub-123")
 }
 ```
 
