@@ -33,6 +33,8 @@ class StubberTests: XCTestCase {
     Stubber.stub(articleService.bar) { "Article" }
     XCTAssertEqual(userService.foo(), "User")
     XCTAssertEqual(articleService.bar(), "Article")
+    XCTAssertEqual(Stubber.executions(userService.foo).count, 1)
+    XCTAssertEqual(Stubber.executions(articleService.bar).count, 1)
   }
 }
 

@@ -33,10 +33,6 @@ public func stubbed<A, R>(_ f: (A) -> R, args: A, default: @autoclosure () -> R?
 
 // MARK: Executions
 
-public func executions<R>(_ f: () -> R) -> [Execution<Void, R>] {
-  return _executions(f)
-}
-
 public func executions<A, R>(_ f: (A) -> R) -> [Execution<A, R>] {
   return _executions(f)
 }
