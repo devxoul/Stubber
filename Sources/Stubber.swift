@@ -11,15 +11,7 @@ private let store = Store()
 
 // MARK: Stub
 
-public func stub<R>(_ f: () -> R, with closure: @escaping () -> R) {
-  _stub(f, with: closure)
-}
-
 public func stub<A, R>(_ f: (A) -> R, with closure: @escaping (A) -> R) {
-  _stub(f, with: closure)
-}
-
-private func _stub<A, R>(_ f: (A) -> R, with closure: @escaping (A) -> R) {
   let address = functionAddress(of: f)
   store.stubs[address] = closure
   store.executions[address]?.removeAll()
@@ -28,15 +20,7 @@ private func _stub<A, R>(_ f: (A) -> R, with closure: @escaping (A) -> R) {
 
 // MARK: Stubbed
 
-public func stubbed<R>(_ f: (() -> R), default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
-  return _stubbed(f, args: (), default: `default`, file: file, line: line, function: function)
-}
-
 public func stubbed<A, R>(_ f: (A) -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
-  return _stubbed(f, args: args, default: `default`, file: file, line: line, function: function)
-}
-
-private func _stubbed<A, R>(_ f: (A) -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
   let address = functionAddress(of: f)
   let closure = store.stubs[address] as? (A) -> R
   guard let result = closure?(args) ?? `default`() else {
