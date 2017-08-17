@@ -11,7 +11,7 @@ private let store = Store()
 
 // MARK: Stub
 
-public func stub<A, R>(_ f: (A) -> R, with closure: @escaping (A) -> R) {
+public func register<A, R>(_ f: (A) -> R, with closure: @escaping (A) -> R) {
   let address = functionAddress(of: f)
   store.stubs[address] = closure
   store.executions[address]?.removeAll()
@@ -20,7 +20,7 @@ public func stub<A, R>(_ f: (A) -> R, with closure: @escaping (A) -> R) {
 
 // MARK: Stubbed
 
-public func stubbed<A, R>(_ f: (A) -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
+public func invoke<A, R>(_ f: (A) -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) -> R {
   let address = functionAddress(of: f)
   let closure = store.stubs[address] as? (A) -> R
   guard let result = closure?(args) ?? `default`() else {
