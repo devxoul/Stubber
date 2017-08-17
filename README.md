@@ -14,17 +14,17 @@ import Stubber
 
 final class StubUserService: UserServiceProtocol {
   func follow(userID: Int) -> String {
-    return Stubber.stubbed(follow, args: userID)
+    return Stubber.invoke(follow, args: userID)
   }
 
   func edit(userID: Int, name: String) -> Bool {
-    return Stubber.stubbed(edit, args: (userID, name))
+    return Stubber.invoke(edit, args: (userID, name))
   }
 }
 
 func testMethodCall() {
   let userService = StubUserService()
-  Stubber.stub(userService.follow) { userID in "stub-\(userID)" } // stub
+  Stubber.register(userService.follow) { userID in "stub-\(userID)" } // stub
   Stubber.follow(userID: 123) // call
   XCTAssertEqual(Stubber.executions(userService.follow).count, 1)
   XCTAssertEqual(Stubber.executions(userService.follow)[0].arguments, 123)
