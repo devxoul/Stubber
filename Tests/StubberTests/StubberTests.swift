@@ -10,13 +10,13 @@ class StubberTests: XCTestCase {
   func testExample() {
     let userService = StubUserService()
 
-    Stubber.stub(userService.follow) { userID in "stub-follow-\(userID)" }
+    Stubber.register(userService.follow) { userID in "stub-follow-\(userID)" }
     XCTAssertEqual(userService.follow(userID: 123), "stub-follow-123")
     XCTAssertEqual(Stubber.executions(userService.follow).count, 1)
     XCTAssertEqual(Stubber.executions(userService.follow)[0].arguments, 123)
     XCTAssertEqual(Stubber.executions(userService.follow)[0].result, "stub-follow-123")
 
-    Stubber.stub(userService.follow) { userID in "new-stub-follow-\(userID)" }
+    Stubber.register(userService.follow) { userID in "new-stub-follow-\(userID)" }
     XCTAssertEqual(userService.follow(userID: 456), "new-stub-follow-456")
     XCTAssertEqual(Stubber.executions(userService.follow).count, 1)
     XCTAssertEqual(Stubber.executions(userService.follow)[0].arguments, 456)
@@ -29,8 +29,8 @@ class StubberTests: XCTestCase {
   func testNoArgument() {
     let userService = StubUserService()
     let articleService = StubArticleService()
-    Stubber.stub(userService.foo) { "User" }
-    Stubber.stub(articleService.bar) { "Article" }
+    Stubber.register(userService.foo) { "User" }
+    Stubber.register(articleService.bar) { "Article" }
     XCTAssertEqual(userService.foo(), "User")
     XCTAssertEqual(articleService.bar(), "Article")
     XCTAssertEqual(Stubber.executions(userService.foo).count, 1)
@@ -51,24 +51,24 @@ protocol ArticleServiceType {
 
 final class StubUserService: UserServiceType {
   func foo() -> String {
-    return Stubber.stubbed(foo, args: ())
+    return Stubber.invoke(foo, args: ())
   }
 
   func follow(userID: Int) -> String {
-    return Stubber.stubbed(follow, args: userID)
+    return Stubber.invoke(follow, args: userID)
   }
 
   func unfollow(userID: Int) -> String {
-    return Stubber.stubbed(unfollow, args: userID)
+    return Stubber.invoke(unfollow, args: userID)
   }
 }
 
 final class StubArticleService: ArticleServiceType {
   func bar() -> String {
-    return Stubber.stubbed(bar, args: ())
+    return Stubber.invoke(bar, args: ())
   }
 
   func like(articleID: Int) -> String {
-    return Stubber.stubbed(like, args: articleID)
+    return Stubber.invoke(like, args: articleID)
   }
 }
