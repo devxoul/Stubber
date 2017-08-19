@@ -46,5 +46,5 @@ script:
 
 after_success:
   - if [ $TEST == 1 ]; then
-      bash <(curl -s https://codecov.io/bash) -J 'Stubber';
+      bash <(curl -s https://codecov.io/bash) -J 'Stubber' -X xcodeplist;
     fi
