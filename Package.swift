@@ -1,7 +1,14 @@
-// swift-tools-version:3.1
+// swift-tools-version:4.0
 
 import PackageDescription
 
 let package = Package(
-    name: "Stubber"
+  name: "Stubber",
+  products: [
+    .library(name: "Stubber", targets: ["Stubber"]),
+  ],
+  targets: [
+    .target(name: "Stubber"),
+    .testTarget(name: "StubberTests", dependencies: ["Stubber"]),
+  ]
 )
