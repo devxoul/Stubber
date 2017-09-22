@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Stubber"
-  s.version          = "0.5.0"
+  s.version          = "1.0.0"
   s.summary          = "A minimal method stub for Swift"
   s.homepage         = "https://github.com/devxoul/Stubber"
   s.license          = { :type => "MIT", :file => "LICENSE" }
@@ -14,8 +14,4 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = "10.11"
   s.tvos.deployment_target = "9.0"
   s.watchos.deployment_target = "2.0"
-
-  s.pod_target_xcconfig = {
-    "SWIFT_VERSION" => "4.0"
-  }
 end
