@@ -24,6 +24,11 @@ class StubberTests: XCTestCase {
 
     Stubber.clear()
     XCTAssertEqual(Stubber.executions(userService.follow).isEmpty, true)
+
+    Stubber.register(userService.unfollow) { userID in "stub-unfollow-\(userID)" }
+    XCTAssertEqual(try! userService.unfollow(userID: 789), "stub-unfollow-789")
+    XCTAssertEqual(Stubber.executions(userService.unfollow)[0].arguments, 789)
+    XCTAssertEqual(Stubber.executions(userService.unfollow)[0].result, "stub-unfollow-789")
   }
 
   func testNoArgument() {
