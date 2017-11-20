@@ -41,7 +41,7 @@ class StubberTests: XCTestCase {
 protocol UserServiceType {
   func foo() -> String
   func follow(userID: Int) -> String
-  func unfollow(userID: Int) -> String
+  func unfollow(userID: Int) throws -> String
 }
 
 protocol ArticleServiceType {
@@ -58,8 +58,8 @@ final class StubUserService: UserServiceType {
     return Stubber.invoke(follow, args: userID)
   }
 
-  func unfollow(userID: Int) -> String {
-    return Stubber.invoke(unfollow, args: userID)
+  func unfollow(userID: Int) throws -> String {
+    return try Stubber.invoke(unfollow, args: userID)
   }
 }
 
