@@ -23,9 +23,14 @@ final class StubUserService: UserServiceProtocol {
 }
 
 func testMethodCall() {
+  // given 
   let userService = StubUserService()
   Stubber.register(userService.follow) { userID in "stub-\(userID)" } // stub
-  Stubber.follow(userID: 123) // call
+  
+  // when
+  userService.follow(userID: 123) // call
+  
+  // then
   XCTAssertEqual(Stubber.executions(userService.follow).count, 1)
   XCTAssertEqual(Stubber.executions(userService.follow)[0].arguments, 123)
   XCTAssertEqual(Stubber.executions(userService.follow)[0].result, "stub-123")
