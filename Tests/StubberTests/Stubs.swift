@@ -29,4 +29,8 @@ final class StubClass {
   func argument2_returnString_defaultNo_throws(_ value1: String, _ value2: Int) throws -> String {
     return try Stubber.invoke(argument2_returnString_defaultNo_throws, args: (value1, value2))
   }
+
+  func argument_escapeClosure(_ value1: String, _ value2: @escaping (Bool) -> String) -> Void {
+    return Stubber.invoke(argument_escapeClosure, args: (value1, escaping(value2)), default: Void())
+  }
 }

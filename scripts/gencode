@@ -1,0 +1,10 @@
+#!/bin/sh
+# Copyright (c) Yoichi Tagaya
+# https://github.com/Swinject/Swinject
+
+files="Sources/Stubber/Escaping.Arguments"
+
+for file in $files; do
+  echo "Generating code to $file.swift"
+  erb -v -T 1 $file.erb > $file.swift
+done

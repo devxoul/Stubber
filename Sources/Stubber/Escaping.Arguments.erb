@@ -1,0 +1,20 @@
+<% puts "// WARNING: This swift file is auto generated. Don't modify this file directly.\n\n" %>
+<% arguments = 1..20 %>
+<%
+  for arg in arguments
+    argument_range = 1..arg
+
+    generic_arr = argument_range.map { |i| "Arg#{i}" }
+    generic_str = generic_arr.join(", ")
+
+    params_arr = argument_range.map { |i| "_ arg#{i}: Arg#{i}" }
+    params_str = params_arr.join(", ")
+
+    return_arr = argument_range.map { |i| "arg#{i}" }
+    return_str = return_arr.join(", ")
+%>
+public func escaping<<%= generic_str %>>(<%= params_str %>) -> (<%= generic_str %>)! {
+  return (<%= return_str %>)
+}
+
+<% end %>
