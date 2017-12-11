@@ -7,73 +7,106 @@ class StubberTests: XCTestCase {
     Stubber.clear()
   }
 
-  func testExample() {
-    let userService = StubUserService()
+  func test_argument0_defaultNo_returnVoid() {
+    // given
+    let f = StubClass().argument0_returnVoid_defaultNo
+    Stubber.register(f) { _ in }
 
-    Stubber.register(userService.follow) { userID in "stub-follow-\(userID)" }
-    XCTAssertEqual(userService.follow(userID: 123), "stub-follow-123")
-    XCTAssertEqual(Stubber.executions(userService.follow).count, 1)
-    XCTAssertEqual(Stubber.executions(userService.follow)[0].arguments, 123)
-    XCTAssertEqual(Stubber.executions(userService.follow)[0].result, "stub-follow-123")
+    // when
+    f()
 
-    Stubber.register(userService.follow) { userID in "new-stub-follow-\(userID)" }
-    XCTAssertEqual(userService.follow(userID: 456), "new-stub-follow-456")
-    XCTAssertEqual(Stubber.executions(userService.follow).count, 1)
-    XCTAssertEqual(Stubber.executions(userService.follow)[0].arguments, 456)
-    XCTAssertEqual(Stubber.executions(userService.follow)[0].result, "new-stub-follow-456")
-
-    Stubber.clear()
-    XCTAssertEqual(Stubber.executions(userService.follow).isEmpty, true)
-
-    Stubber.register(userService.unfollow) { userID in "stub-unfollow-\(userID)" }
-    XCTAssertEqual(try! userService.unfollow(userID: 789), "stub-unfollow-789")
-    XCTAssertEqual(Stubber.executions(userService.unfollow)[0].arguments, 789)
-    XCTAssertEqual(Stubber.executions(userService.unfollow)[0].result, "stub-unfollow-789")
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
   }
 
-  func testNoArgument() {
-    let userService = StubUserService()
-    let articleService = StubArticleService()
-    Stubber.register(userService.foo) { "User" }
-    Stubber.register(articleService.bar) { "Article" }
-    XCTAssertEqual(userService.foo(), "User")
-    XCTAssertEqual(articleService.bar(), "Article")
-    XCTAssertEqual(Stubber.executions(userService.foo).count, 1)
-    XCTAssertEqual(Stubber.executions(articleService.bar).count, 1)
+  func test_argument0_defaultVoid_returnVoid() {
+    // given
+    let f = StubClass().argument0_returnVoid_defaultVoid
+
+    // when
+    f()
+    f()
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 2)
+  }
+
+  func test_argument1_defaultNo_returnInt() {
+    // given
+    let f = StubClass().argument1_returnInt_defaultNo
+    Stubber.register(f) { _ in 10 }
+
+    // when
+    let result = f("Hello")
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments, "Hello")
+    XCTAssertEqual(Stubber.executions(f)[0].result, 10)
+    XCTAssertEqual(result, 10)
+  }
+
+  func test_argument1_defaultInt_returnInt() {
+    // given
+    let f = StubClass().argument1_returnInt_defaultInt
+
+    // when
+    let result = f("Hello, default!")
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments, "Hello, default!")
+    XCTAssertEqual(Stubber.executions(f)[0].result, 0)
+    XCTAssertEqual(result, 0)
+  }
+
+  func test_argument3_returnOptionalString_defaultNo() {
+    // given
+    let f = StubClass().argument3_returnOptionalString_defaultNo
+    Stubber.register(f) { _ in "Test" }
+
+    // when
+    let result = f("Hello", 10, 20)
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.0, "Hello")
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.1, 10)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.2, 20)
+    XCTAssertEqual(Stubber.executions(f)[0].result, "Test")
+    XCTAssertEqual(result, "Test")
+  }
+
+  func test_argument3_returnOptionalString_defaultString() {
+    // given
+    let f = StubClass().argument3_returnOptionalString_defaultString
+
+    // when
+    let result = f("Hello", 10, 20)
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.0, "Hello")
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.1, 10)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.2, 20)
+    XCTAssertEqual(Stubber.executions(f)[0].result, "default")
+    XCTAssertEqual(result, "default")
+  }
+
+  func test_argument2_returnString_defaultNo_throws() {
+    // given
+    let f = StubClass().argument2_returnString_defaultNo_throws
+    Stubber.register(f) { _ in "Stubbed" }
+
+    // when
+    let result = try? f("Hello", 30)
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.0, "Hello")
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.1, 30)
+    XCTAssertEqual(Stubber.executions(f)[0].result, "Stubbed")
+    XCTAssertEqual(result, "Stubbed")
   }
 }
 
-protocol UserServiceType {
-  func foo() -> String
-  func follow(userID: Int) -> String
-  func unfollow(userID: Int) throws -> String
-}
-
-protocol ArticleServiceType {
-  func bar() -> String
-  func like(articleID: Int) -> String
-}
-
-final class StubUserService: UserServiceType {
-  func foo() -> String {
-    return Stubber.invoke(foo, args: ())
-  }
-
-  func follow(userID: Int) -> String {
-    return Stubber.invoke(follow, args: userID)
-  }
-
-  func unfollow(userID: Int) throws -> String {
-    return try Stubber.invoke(unfollow, args: userID)
-  }
-}
-
-final class StubArticleService: ArticleServiceType {
-  func bar() -> String {
-    return Stubber.invoke(bar, args: ())
-  }
-
-  func like(articleID: Int) -> String {
-    return Stubber.invoke(like, args: articleID)
-  }
-}
