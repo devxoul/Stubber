@@ -120,5 +120,20 @@ class StubberTests: XCTestCase {
     XCTAssertEqual(Stubber.executions(f)[0].result, "Stubbed")
     XCTAssertEqual(result, "Stubbed")
   }
-}
 
+  /// ⚠️ Generic is not supported yet.
+  func _test_argument_1_generic() {
+    // given
+    let f: (String) -> String = StubClass().argument_1_generic
+    Stubber.register(f) { _ in "Stubbed" }
+
+    // when
+    let result = f("Hi")
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments, "Hello")
+    XCTAssertEqual(Stubber.executions(f)[0].result, "Stubbed")
+    XCTAssertEqual(result, "Stubbed")
+  }
+}
