@@ -22,6 +22,10 @@ final class StubClass {
     return Stubber.invoke(argument3_returnOptionalString_defaultString, args: (value1, value2, value3), default: "default")
   }
 
+  func argument0_returnOptionalInt_defaultNil() -> Int? {
+    return Stubber.invoke(argument0_returnOptionalInt_defaultNil, args: (), default: nil)
+  }
+
   func argument2_returnString_defaultNo_throws(_ value1: String, _ value2: Int) throws -> String {
     return try Stubber.invoke(argument2_returnString_defaultNo_throws, args: (value1, value2))
   }

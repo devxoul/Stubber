@@ -93,6 +93,18 @@ class StubberTests: XCTestCase {
     XCTAssertEqual(result, "default")
   }
 
+  func test_argument0_returnOptionalInt_defaultNil() {
+    // given
+    let f = StubClass().argument0_returnOptionalInt_defaultNil
+
+    // when
+    let result = f()
+
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertNil(Stubber.executions(f)[0].result)
+    XCTAssertNil(result)
+  }
+
   func test_argument2_returnString_defaultNo_throws() {
     // given
     let f = StubClass().argument2_returnString_defaultNo_throws

@@ -25,18 +25,26 @@ public func stub<A, R>(_ f: (A) throws -> R, with closure: @escaping (A) -> R) {
 
 // MARK: Stubbed
 
-public func invoke<A, R>(_ f: (A) throws -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
+public func invoke<A, R>(_ f: (A) throws -> R, args: A, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
   let address = functionAddress(of: f)
   let closure = store.stubs[address] as? (A) -> R
-  guard let result = closure?(args) ?? `default`() else {
+  guard let result = closure?(args) else {
     preconditionFailure("⚠️ '\(function)' is not stubbed.", file: file, line: line)
   }
   store.executions[address] = (store.executions[address] ?? []) + [Execution<A, R>(arguments: args, result: result)]
   return result
 }
 
+public func invoke<A, R>(_ f: (A) throws -> R, args: A, default: @autoclosure () -> R, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
+  let address = functionAddress(of: f)
+  let closure = store.stubs[address] as? (A) -> R
+  let result = closure?(args) ?? `default`()
+  store.executions[address] = (store.executions[address] ?? []) + [Execution<A, R>(arguments: args, result: result)]
+  return result
+}
+
 @available(*, deprecated, renamed: "invoke(_:args:)")
-public func stubbed<A, R>(_ f: (A) throws -> R, args: A, default: @autoclosure () -> R? = nil, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
+public func stubbed<A, R>(_ f: (A) throws -> R, args: A, default: @autoclosure () -> R = nil as R!, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
   return try invoke(f, args: args)
 }
 
