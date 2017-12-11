@@ -22,7 +22,7 @@ install:
 
 before_script:
   - set -o pipefail
-  - swift package generate-xcodeproj
+  - make project
 
 script:
   - if [ $TEST == 1 ]; then
