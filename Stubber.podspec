@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Stubber"
-  s.version          = "1.1.0"
+  s.version          = "1.2.0"
   s.summary          = "A minimal method stub for Swift"
   s.homepage         = "https://github.com/devxoul/Stubber"
   s.license          = { :type => "MIT", :file => "LICENSE" }
