@@ -25,7 +25,7 @@ public func stub<A, R>(_ f: @escaping (A) throws -> R, with closure: @escaping (
 
 // MARK: Stubbed
 
-public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
+public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A!, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
   let address = functionAddress(of: f)
   let closure = store.stubs[address] as? (A) -> R
   guard let result = closure?(args) else {
@@ -35,7 +35,7 @@ public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A, file: StaticSt
   return result
 }
 
-public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A, default: @autoclosure () -> R, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
+public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A!, default: @autoclosure () -> R, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
   let address = functionAddress(of: f)
   let closure = store.stubs[address] as? (A) -> R
   let result = closure?(args) ?? `default`()

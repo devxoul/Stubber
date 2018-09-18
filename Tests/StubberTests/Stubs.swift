@@ -31,7 +31,7 @@ final class StubClass {
   }
 
   func argument_escapeClosure(_ value1: String, _ value2: @escaping (Bool) -> String) -> Void {
-    return Stubber.invoke(argument_escapeClosure, args: (value1, escaping(value2)), default: Void())
+    return Stubber.invoke(argument_escapeClosure, args: escaping(value1, value2), default: Void())
   }
 
   func argument_1_generic<T>(_ value: T) -> T {
