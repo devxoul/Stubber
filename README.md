@@ -37,6 +37,17 @@ func testMethodCall() {
 }
 ```
 
+## Escaping Parameters
+
+When a function contains an escaped parameter, use `escaping()` on arguments.
+
+```diff
+ func request(path: String, completion: @escaping (Result) -> Void) {
+-  Stubber.invoke(request, args: (path, completion))
++  Stubber.invoke(request, args: escaping(path, completion))
+ }
+```
+
 ## Installation
 
 ```ruby
