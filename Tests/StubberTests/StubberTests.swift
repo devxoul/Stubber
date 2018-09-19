@@ -60,6 +60,70 @@ class StubberTests: XCTestCase {
     XCTAssertEqual(result, 0)
   }
 
+  func test_argument1_parameterOptional_returnBool_defaultNo() {
+    // given
+    let f = StubClass().argument1_parameterOptional_returnBool_defaultNo
+    Stubber.register(f) { key in
+      return true
+    }
+
+    // when
+    let result = f("String Parameter")
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments, "String Parameter")
+    XCTAssertEqual(Stubber.executions(f)[0].result, true)
+    XCTAssertEqual(result, true)
+  }
+
+  func test_argument1_parameterOptional_returnBool_defaultBool() {
+    // given
+    let f = StubClass().argument1_parameterOptional_returnBool_defaultBool
+
+    // when
+    let result = f("String Value")
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments, "String Value")
+    XCTAssertEqual(Stubber.executions(f)[0].result, false)
+    XCTAssertEqual(result, false)
+  }
+
+  func test_argument2_parameterOptional_returnBool_defaultNo() {
+    // given
+    let f = StubClass().argument2_parameterOptional_returnBool_defaultNo
+    Stubber.register(f) { key in
+      return true
+    }
+
+    // when
+    let result = f("String1", "String2")
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.0, "String1")
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.1, "String2")
+    XCTAssertEqual(Stubber.executions(f)[0].result, true)
+    XCTAssertEqual(result, true)
+  }
+
+  func test_argument2_parameterOptional_returnBool_defaultBool() {
+    // given
+    let f = StubClass().argument2_parameterOptional_returnBool_defaultBool
+
+    // when
+    let result = f("String Value1", "String Value2")
+
+    // then
+    XCTAssertEqual(Stubber.executions(f).count, 1)
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.0, "String Value1")
+    XCTAssertEqual(Stubber.executions(f)[0].arguments.1, "String Value2")
+    XCTAssertEqual(Stubber.executions(f)[0].result, false)
+    XCTAssertEqual(result, false)
+  }
+
   func test_argument3_returnOptionalString_defaultNo() {
     // given
     let f = StubClass().argument3_returnOptionalString_defaultNo

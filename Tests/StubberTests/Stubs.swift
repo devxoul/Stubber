@@ -15,6 +15,20 @@ final class StubClass {
     return Stubber.invoke(argument1_returnInt_defaultInt, args: value, default: 0)
   }
 
+  func argument1_parameterOptional_returnBool_defaultNo(_ value: String?) -> Bool {
+    return Stubber.invoke(argument1_parameterOptional_returnBool_defaultNo, args: value)
+  }
+  func argument1_parameterOptional_returnBool_defaultBool(_ value: String?) -> Bool {
+    return Stubber.invoke(argument1_parameterOptional_returnBool_defaultBool, args: value, default: false)
+  }
+
+  func argument2_parameterOptional_returnBool_defaultNo(_ value1: String?, _ value2: String) -> Bool {
+    return Stubber.invoke(argument2_parameterOptional_returnBool_defaultNo, args: (value1, value2))
+  }
+  func argument2_parameterOptional_returnBool_defaultBool(_ value1: String?, _ value2: String) -> Bool {
+    return Stubber.invoke(argument2_parameterOptional_returnBool_defaultBool, args: (value1, value2), default: false)
+  }
+
   func argument3_returnOptionalString_defaultNo(_ value1: String, _ value2: Int, _ value3: Float) -> String? {
     return Stubber.invoke(argument3_returnOptionalString_defaultNo, args: (value1, value2, value3))
   }
