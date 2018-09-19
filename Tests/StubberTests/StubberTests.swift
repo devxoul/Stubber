@@ -1,5 +1,5 @@
 import XCTest
-@testable import Stubber
+import Stubber
 
 class StubberTests: XCTestCase {
   override func setUp() {
