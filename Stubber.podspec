@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Stubber"
-  s.version          = "1.3.1"
+  s.version          = "1.4.0"
   s.summary          = "A minimal method stub for Swift"
   s.homepage         = "https://github.com/devxoul/Stubber"
   s.license          = { :type => "MIT", :file => "LICENSE" }
@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
                          :tag => s.version.to_s }
   s.source_files = "Sources/**/*.{swift,h,m}"
   s.frameworks   = "Foundation"
+  s.swift_version = "5.0"
 
   s.ios.deployment_target = "8.0"
   s.osx.deployment_target = "10.11"
