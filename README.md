@@ -1,6 +1,6 @@
 # Stubber
 
-![Swift](https://img.shields.io/badge/Swift-4.0-orange.svg)
+![Swift](https://img.shields.io/badge/Swift-5.0-orange.svg)
 [![CocoaPods](http://img.shields.io/cocoapods/v/Stubber.svg)](https://cocoapods.org/pods/Stubber)
 [![Build Status](https://travis-ci.org/devxoul/Stubber.svg?branch=master)](https://travis-ci.org/devxoul/Stubber)
 [![Codecov](https://img.shields.io/codecov/c/github/devxoul/Stubber.svg)](https://codecov.io/gh/devxoul/Stubber)
