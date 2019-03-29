@@ -44,7 +44,7 @@ public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A, default: @auto
 }
 
 @available(*, deprecated, renamed: "invoke(_:args:)")
-public func stubbed<A, R>(_ f: @escaping (A) throws -> R, args: A, default: @autoclosure () -> R = nil as R!, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
+public func stubbed<A, R>(_ f: @escaping (A) throws -> R, args: A, default: @autoclosure () -> R = (nil as R?)!, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
   return try invoke(f, args: args)
 }
 
@@ -56,7 +56,7 @@ public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A!, file: StaticS
 }
 
 public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A!, default: @autoclosure () -> R, file: StaticString = #file, line: UInt = #line, function: StaticString = #function) rethrows -> R {
-  return try invoke(f, args: args as A, default: `default`, file: file, line: line, function: function)
+  return try invoke(f, args: args as A, default: `default`(), file: file, line: line, function: function)
 }
 
 
