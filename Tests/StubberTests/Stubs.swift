@@ -1,4 +1,5 @@
 import Stubber
+import Foundation
 
 final class StubClass {
   func argument0_returnVoid_defaultNo() {
@@ -50,5 +51,9 @@ final class StubClass {
 
   func argument_1_generic<T>(_ value: T) -> T {
     return Stubber.invoke(argument_1_generic, args: value, default: value)
+  }
+
+  func sleep() {
+    Stubber.invoke(self.sleep, args: (), default: { Foundation.sleep(1) }())
   }
 }

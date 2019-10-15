@@ -200,4 +200,12 @@ class StubberTests: XCTestCase {
     XCTAssertEqual(Stubber.executions(f)[0].result, "Stubbed")
     XCTAssertEqual(result, "Stubbed")
   }
+
+  func testThreadSafety() {
+    let f = StubClass().sleep
+    for _ in 0..<10 {
+      DispatchQueue.global().async(execute: f)
+    }
+    XCTWaiter().wait(for: [XCTestExpectation()], timeout: 1)
+  }
 }

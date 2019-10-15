@@ -1,3 +1,5 @@
+import Foundation
+
 private typealias FunctionAddress = Int
 private typealias Function = Any
 
@@ -7,6 +9,7 @@ private final class Store {
 }
 
 private let store = Store()
+private let lock = NSLock()
 
 
 // MARK: Stub
@@ -31,7 +34,11 @@ public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A, file: StaticSt
   guard let result = closure?(args) else {
     preconditionFailure("⚠️ '\(function)' is not stubbed.", file: file, line: line)
   }
+
+  lock.lock()
   store.executions[address] = (store.executions[address] ?? []) + [Execution<A, R>(arguments: args, result: result)]
+  lock.unlock()
+
   return result
 }
 
@@ -39,7 +46,11 @@ public func invoke<A, R>(_ f: @escaping (A) throws -> R, args: A, default: @auto
   let address = functionAddress(of: f)
   let closure = store.stubs[address] as? (A) -> R
   let result = closure?(args) ?? `default`()
+
+  lock.lock()
   store.executions[address] = (store.executions[address] ?? []) + [Execution<A, R>(arguments: args, result: result)]
+  lock.unlock()
+
   return result
 }
 
