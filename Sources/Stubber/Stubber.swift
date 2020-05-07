@@ -88,8 +88,10 @@ private func _executions<A, R>(_ f: @escaping (A) throws -> R) -> [Execution<A, 
 // MARK: Clear
 
 public func clear() {
+  lock.lock()
   store.stubs.removeAll()
   store.executions.removeAll()
+  lock.unlock()
 }
 
 
