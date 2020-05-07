@@ -16,8 +16,10 @@ private let lock = NSLock()
 
 public func register<A, R>(_ f: @escaping (A) throws -> R, with closure: @escaping (A) -> R) {
   let address = functionAddress(of: f)
+  lock.lock()
   store.stubs[address] = closure
   store.executions[address]?.removeAll()
+  lock.unlock()
 }
 
 @available(*, deprecated, renamed: "register(_:with:)")
