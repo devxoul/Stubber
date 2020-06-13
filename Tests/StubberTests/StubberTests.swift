@@ -226,4 +226,25 @@ class StubberTests: XCTestCase {
     _ = executions.first?.arguments.0
     Stubber.clear()
   }
+
+  func testMatcherArgumentNil() {
+    // given
+    final class Foo {
+      func doSomething(with arg: String?) {
+        Stubber.invoke(doSomething(with:), args: arg, default: Void())
+      }
+    }
+
+    func expect<T>(_ value: T, toHaveCount count: Int, file: StaticString = #file, line: UInt = #line, where: @escaping (T.Iterator.Element) -> Bool) where T: Collection {
+      XCTAssertEqual(value.filter(`where`).count, count, file: file, line: line)
+    }
+
+    let foo = Foo()
+    foo.doSomething(with: nil)
+
+    let executions = Stubber.executions(foo.doSomething(with:))
+    expect(executions, toHaveCount: 1) {
+      $0.arguments == nil
+    }
+  }
 }
