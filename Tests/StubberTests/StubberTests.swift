@@ -208,4 +208,22 @@ class StubberTests: XCTestCase {
     }
     XCTWaiter().wait(for: [XCTestExpectation()], timeout: 1)
   }
+
+  func testClosureCrash() {
+    // given
+    final class ImageManager {
+      func requestImage(for asset: AnyObject, resultHandler: (() -> Void)? = nil) {
+        return Stubber.invoke(requestImage, args: (asset, resultHandler), default: Void())
+      }
+    }
+
+    let imageManager = ImageManager()
+    imageManager.requestImage(for: NSObject())
+
+    let executions = Stubber.executions(imageManager.requestImage)
+
+    // crash
+    _ = executions.first?.arguments.0
+    Stubber.clear()
+  }
 }
