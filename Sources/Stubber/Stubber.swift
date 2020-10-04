@@ -97,9 +97,15 @@ public func clear() {
 
 // MARK: Utils
 
-private func functionAddress<A, R>(of f: @escaping (A) throws -> R) -> Int {
-  let (_, lo) = unsafeBitCast(f, to: (Int, Int).self)
-  let offset = MemoryLayout<Int>.size == 8 ? 16 : 12
-  let pointer = UnsafePointer<Int>(bitPattern: lo + offset)!
-  return pointer.pointee
+internal func functionAddress<A, R>(of f: @escaping (A) throws -> R) -> Int {
+  #if swift(>=5.3)
+    let (hi, _) = unsafeBitCast(f, to: (Int, Int).self)
+    let pointer = UnsafePointer<Int>(bitPattern: hi)!
+    return pointer.pointee
+  #else
+    let (_, lo) = unsafeBitCast(f, to: (Int, Int).self)
+    let offset = MemoryLayout<Int>.size == 8 ? 16 : 12
+    let pointer = UnsafePointer<Int>(bitPattern: lo + offset)!
+    return pointer.pointee
+  #endif
 }
