@@ -14,17 +14,37 @@ jobs:
     strategy:
       matrix:
         env:
-          - sdk: iphonesimulator
+          - xcode: 12.2
+            sdk: iphonesimulator
             destination: platform=iOS Simulator,name=iPhone 11 Pro,OS=latest
 
-          - sdk: macosx
+          - xcode: 12.2
+            sdk: macosx
             destination: arch=x86_64
 
-          - sdk: appletvsimulator
+          - xcode: 12.2
+            sdk: appletvsimulator
+            destination: platform=tvOS Simulator,name=Apple TV,OS=latest
+
+          - xcode: 11.7
+            sdk: iphonesimulator
+            destination: platform=iOS Simulator,name=iPhone 11 Pro,OS=latest
+
+          - xcode: 11.7
+            sdk: macosx
+            destination: arch=x86_64
+
+          - xcode: 11.7
+            sdk: appletvsimulator
             destination: platform=tvOS Simulator,name=Apple TV,OS=latest
 
     steps:
     - uses: actions/checkout@v1
+
+    - name: Select Xcode
+      uses: maxim-lobanov/setup-xcode@v1.1
+      with:
+        xcode-version: ${{ matrix.env.xcode }}
 
     - name: List SDKs and Devices
       run: xcodebuild -showsdks; instruments -s
